@@ -1,0 +1,26 @@
+~/.dt/dt $@ > ~/.dt/dt_tmp
+COMMAND_TYPE=$(head -n 1 ~/.dt/dt_tmp)
+if [ $# -eq 0 ]; then
+    NEXT_PATH=$(~/.dt/dt prev | tail -n 1) # Let dt return pwd if no prev tag.
+    ~/.dt/dt --update-prev $(pwd)
+    if [ "$COMMAND_TYPE" == "message" ]; then
+        tail -n 1 ~/.dt/dt_tmp
+    else
+        cd $NEXT_PATH
+    fi
+else
+    COMMAND_TYPE=$(head -n 1 ~/.dt/dt_tmp)
+    if [ "$COMMAND_TYPE" == "switch_directory" ]; then
+        NEXT_PATH=$(tail -n 1 ~/.dt/dt_tmp)
+        ~/.dt/dt --update-prev $(pwd)
+        cd $NEXT_PATH
+    elif [ "$COMMAND_TYPE" == "show_tag_entry_list" ]; then
+        tail -n +2 ~/.dt/dt_tmp  
+    elif [ "$COMMAND_TYPE" == "message" ]; then
+        tail -n 1 ~/.dt/dt_tmp
+        #echo $(cut -d " " -f 2)
+    else
+        echo "Unknown command: $COMMAND_TYPE"
+    fi
+fi
+rm ~/.dt/dt_tmp
