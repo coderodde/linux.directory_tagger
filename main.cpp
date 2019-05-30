@@ -258,6 +258,7 @@ int main(int argc, char* argv[]) {
                 << tagEntry.getDirectory();
             
             std::cout << OPERATION_DESCRIPTOR_SWITCH_DIRECTORY
+                      << '\n'
                       << path;
         }
 
